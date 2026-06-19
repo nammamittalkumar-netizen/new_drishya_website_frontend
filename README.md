@@ -27,7 +27,6 @@ Demo login: any email/password works — the form just navigates to the dashboar
 | `/live`          | Live monitoring grid — zone/status filters, grid density, fullscreen |
 | `/alerts`        | Alerts table with search + status/severity filters                  |
 | `/alerts/[id]`   | Incident details — snapshot, clip, AI confidence, status workflow   |
-| `/incidents`     | High-priority detections needing review                             |
 | `/cameras`       | Camera management — add/edit/disable, test connection               |
 | `/reports`       | Charts: over time, by camera, by category, high-risk zones, export  |
 | `/users`         | Users & roles + audit log                                           |
