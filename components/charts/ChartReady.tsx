@@ -16,7 +16,10 @@ export function ChartReady({
   children: ReactNode;
 }) {
   const [ready, setReady] = useState(false);
-  useEffect(() => setReady(true), []);
+  useEffect(() => {
+    const frame = requestAnimationFrame(() => setReady(true));
+    return () => cancelAnimationFrame(frame);
+  }, []);
 
   if (!ready) {
     return (

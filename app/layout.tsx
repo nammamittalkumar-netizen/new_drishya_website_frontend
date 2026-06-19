@@ -1,13 +1,6 @@
 import type { Metadata, Viewport } from "next";
-import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
-
-const inter = Inter({
-  subsets: ["latin"],
-  variable: "--font-inter",
-  display: "swap",
-});
 
 export const metadata: Metadata = {
   title: {
@@ -35,7 +28,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.variable} antialiased`}>
+      <body>
         <Providers>{children}</Providers>
       </body>
     </html>
