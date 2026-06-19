@@ -20,7 +20,6 @@ export const navItems: NavItem[] = [
   { label: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { label: "Live Monitoring", href: "/live", icon: Video },
   { label: "Alerts", href: "/alerts", icon: Bell, badgeKey: "alerts" },
-  { label: "Incidents", href: "/incidents", icon: Siren },
   { label: "Reports", href: "/reports", icon: BarChart3 },
   { label: "Settings", href: "/settings", icon: Settings },
 ];
