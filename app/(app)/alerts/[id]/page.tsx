@@ -76,29 +76,9 @@ export default async function IncidentDetailPage({
             <CameraFeed camera={feedCamera} />
           </SectionCard>
 
-          <SectionCard
-            title="Video Clip"
-            description="10s clip around the detection (placeholder)"
-          >
-            <div className="flex aspect-video w-full items-center justify-center rounded-xl bg-[#0a0f1c] ring-1 ring-black/40">
-              <button
-                type="button"
-                className="flex flex-col items-center gap-3 text-slate-300 transition-colors hover:text-white"
-              >
-                <span className="grid size-14 place-items-center rounded-full bg-white/10 ring-1 ring-white/20">
-                  <Play className="size-6 translate-x-0.5" />
-                </span>
-                <span className="text-xs font-medium">Play clip</span>
-              </button>
-            </div>
-          </SectionCard>
+        
 
-          <SectionCard title="Review & Status">
-            <IncidentStatusPanel
-              initialStatus={alert.status}
-              initialNote={alert.note}
-            />
-          </SectionCard>
+        
         </div>
 
         <div className="space-y-6">
