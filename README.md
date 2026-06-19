@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Drishya — AI Surveillance Detection System (UI)
 
-## Getting Started
+Front-end for the Drishya AI video-security platform by **Namma CCTV Private Limited**.
+Built with **Next.js 16 (App Router)**, **HeroUI v3**, **Tailwind CSS v4** and **Recharts**.
 
-First, run the development server:
+The UI is fully built with **static/dummy data** and is **API-ready** — every screen
+reads through `lib/api.ts`, so connecting a real backend means editing one file.
+
+## Getting started
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev      # http://localhost:3000
+npm run build    # production build
+npm run start    # serve the production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Demo login: any email/password works — the form just navigates to the dashboard.
+(Prefilled with `arjun@nammacctv.com` / `demo1234`.)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Pages
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+| Route            | Description                                                          |
+| ---------------- | ------------------------------------------------------------------- |
+| `/`              | Login (role selector: Admin / Operator / Viewer)                    |
+| `/dashboard`     | Stat cards, live preview grid, recent alerts, charts, system health |
+| `/live`          | Live monitoring grid — zone/status filters, grid density, fullscreen |
+| `/alerts`        | Alerts table with search + status/severity filters                  |
+| `/alerts/[id]`   | Incident details — snapshot, clip, AI confidence, status workflow   |
+| `/incidents`     | High-priority detections needing review                             |
+| `/cameras`       | Camera management — add/edit/disable, test connection               |
+| `/reports`       | Charts: over time, by camera, by category, high-risk zones, export  |
+| `/users`         | Users & roles + audit log                                           |
+| `/settings`      | Detection toggles, sensitivity, notifications, privacy, API config  |
 
-## Learn More
+## Project structure
 
-To learn more about Next.js, take a look at the following resources:
+```
+app/
+  layout.tsx            Root layout (Inter font, theme provider, metadata)
+  page.tsx              Login
+  (app)/                Authenticated area (shared sidebar + topbar shell)
+    layout.tsx
+    dashboard|live|alerts|incidents|cameras|reports|users|settings/
+components/
+  brand/                Logo lockup
+  layout/               Sidebar, Topbar, AppShell, ThemeToggle, nav config
+  ui/                   StatCard, SectionCard, Chips, ButtonLink, Toggle, …
+  cameras/              CameraFeed (placeholder with detection boxes), managers
+  alerts/               AlertsTable, RecentAlertItem, IncidentStatusPanel
+  charts/               Recharts wrappers (area, bar, donut)
+lib/
+  types.ts              Domain types
+  data.ts               Dummy data
+  api.ts                API-ready data access layer  <-- connect backend here
+  ui.ts                 Labels, colors, icons, formatters
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Theming & brand
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Brand tokens (`#1868D8` Brand Blue, etc.) come from `drishya_brand_kit` and are
+  mapped onto HeroUI's CSS variables in `app/globals.css`.
+- Light-first per the brand kit, with a **dark control-room mode** toggle (top bar).
+- Brand assets (logo, mark, favicons) live in `public/` and `public/brand/`.
 
-## Deploy on Vercel
+## Connecting the real backend
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Replace the function bodies in `lib/api.ts` with `fetch` calls. Set the base URL via
+`NEXT_PUBLIC_API_BASE`. For real-time alerts, add a WebSocket subscription and feed it
+into the alerts list. The video placeholders in `components/cameras/CameraFeed.tsx`
+can be swapped for an RTSP/WebRTC/HLS player while keeping the overlay (LIVE badge,
+labels, bounding boxes).
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+> AI confidence is shown on every detection and a manual review status is required —
+> detections are surfaced as suggestions, not final decisions.
