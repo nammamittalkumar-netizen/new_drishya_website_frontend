@@ -1,15 +1,51 @@
 "use client";
 
-import { Card } from "@heroui/react";
-import { LayoutGrid, X } from "lucide-react";
-import { useMemo, useState } from "react";
+import { Card, ListBox, Select } from "@heroui/react";
+import {
+  LayoutGrid,
+  MapPin,
+  SlidersHorizontal,
+  X,
+  type LucideIcon,
+} from "lucide-react";
+import { useMemo, useState, type Key, type ReactNode } from "react";
 import type { Camera } from "@/lib/types";
 import { CameraFeed } from "./CameraFeed";
 
 type StatusFilter = "all" | "online" | "offline";
 
-const selectClass =
-  "h-9 rounded-lg border border-[var(--border)] bg-[var(--field-background,var(--surface))] px-3 text-sm text-[var(--foreground)] outline-none focus:border-[var(--accent)]";
+/** HeroUI Select with a leading icon, used for the live-monitor filters. */
+function FilterSelect({
+  icon: Icon,
+  selectedKey,
+  onChange,
+  ariaLabel,
+  children,
+}: {
+  icon: LucideIcon;
+  selectedKey: string;
+  onChange: (key: string) => void;
+  ariaLabel: string;
+  children: ReactNode;
+}) {
+  return (
+    <Select
+      aria-label={ariaLabel}
+      selectedKey={selectedKey}
+      onSelectionChange={(key: Key | null) => key != null && onChange(String(key))}
+      className="w-full sm:w-44"
+    >
+      <Select.Trigger className="relative h-10 pl-9 font-medium shadow-sm">
+        <Icon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-[var(--muted)]" />
+        <Select.Value />
+        <Select.Indicator />
+      </Select.Trigger>
+      <Select.Popover>
+        <ListBox>{children}</ListBox>
+      </Select.Popover>
+    </Select>
+  );
+}
 
 export function LiveMonitor({ cameras }: { cameras: Camera[] }) {
   const [zone, setZone] = useState("all");
@@ -38,30 +74,30 @@ export function LiveMonitor({ cameras }: { cameras: Camera[] }) {
   return (
     <>
       <Card className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
-        <div className="flex flex-wrap items-center gap-2">
-          <select
-            className={selectClass}
-            value={zone}
-            onChange={(e) => setZone(e.target.value)}
-            aria-label="Filter by zone"
+        <div className="flex flex-wrap items-center gap-2.5">
+          <FilterSelect
+            icon={MapPin}
+            selectedKey={zone}
+            onChange={setZone}
+            ariaLabel="Filter by zone"
           >
-            <option value="all">All zones</option>
+            <ListBox.Item id="all">All zones</ListBox.Item>
             {zones.map((z) => (
-              <option key={z} value={z}>
+              <ListBox.Item key={z} id={z}>
                 {z}
-              </option>
+              </ListBox.Item>
             ))}
-          </select>
-          <select
-            className={selectClass}
-            value={status}
-            onChange={(e) => setStatus(e.target.value as StatusFilter)}
-            aria-label="Filter by status"
+          </FilterSelect>
+          <FilterSelect
+            icon={SlidersHorizontal}
+            selectedKey={status}
+            onChange={(key) => setStatus(key as StatusFilter)}
+            ariaLabel="Filter by status"
           >
-            <option value="all">All cameras</option>
-            <option value="online">Online only</option>
-            <option value="offline">Offline only</option>
-          </select>
+            <ListBox.Item id="all">All cameras</ListBox.Item>
+            <ListBox.Item id="online">Online only</ListBox.Item>
+            <ListBox.Item id="offline">Offline only</ListBox.Item>
+          </FilterSelect>
         </div>
 
         <div className="flex items-center gap-2">

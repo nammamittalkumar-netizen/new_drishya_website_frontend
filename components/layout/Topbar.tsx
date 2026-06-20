@@ -3,6 +3,7 @@
 import { Avatar, Button, Input } from "@heroui/react";
 import { Bell, Menu, Search } from "lucide-react";
 import Link from "next/link";
+import { AlertSound } from "@/components/alerts/AlertSound";
 import { ThemeToggle } from "./ThemeToggle";
 
 export function Topbar({
@@ -38,6 +39,7 @@ export function Topbar({
       </div>
 
       <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
+        <AlertSound newAlertCount={newAlertCount} />
         <ThemeToggle />
 
         <Link
